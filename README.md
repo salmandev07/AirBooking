@@ -23,27 +23,43 @@ A full-stack flight booking platform built with Django REST Framework on the bac
 
 ## Screenshots
 
-Screens from a local run using demo data:
+Screens from a local run using demo data.
 
-| User login | Registration |
-| :---: | :---: |
-| ![User login](docs/screenshots/01-login.png) | ![Registration](docs/screenshots/02-register.png) |
+### User Login
 
-| Dashboard | Flight search |
-| :---: | :---: |
-| ![Dashboard](docs/screenshots/03-dashboard.png) | ![Flight search results](docs/screenshots/04-search-flights.png) |
+![User login](docs/screenshots/01-login.png)
 
-| My trips | Book a flight |
-| :---: | :---: |
-| ![My booked trips](docs/screenshots/05-my-trips.png) | ![Booking form](docs/screenshots/06-book-flight.png) |
+### Registration
 
-| Admin dashboard | Forgot password |
-| :---: | :---: |
-| ![Admin dashboard](docs/screenshots/07-admin-dashboard.png) | ![Forgot password](docs/screenshots/08-forgot-password.png) |
+![Registration](docs/screenshots/02-register.png)
 
-| Email confirmation | |
-| :---: | :---: |
-| ![Confirm email](docs/screenshots/09-verify-email.png) | |
+### Dashboard
+
+![Dashboard](docs/screenshots/03-dashboard.png)
+
+### Flight Search
+
+![Flight search results](docs/screenshots/04-search-flights.png)
+
+### My Booked Trips
+
+![My booked trips](docs/screenshots/05-my-trips.png)
+
+### Book a Flight
+
+![Booking form](docs/screenshots/06-book-flight.png)
+
+### Admin Dashboard
+
+![Admin dashboard](docs/screenshots/07-admin-dashboard.png)
+
+### Forgot Password
+
+![Forgot password](docs/screenshots/08-forgot-password.png)
+
+### Email Confirmation
+
+![Confirm email](docs/screenshots/09-verify-email.png)
 
 **Adding your own screenshots:** copy your PNG/JPG files into `docs/screenshots/` (keep the filenames above, or update the image links here), then commit and push the images together with this README. GitHub renders the images once the files are in the repository.
 
@@ -253,13 +269,3 @@ All endpoints return JSON. Protected endpoints require the `Authorization: Beare
 - **Payment Failure Simulation:** Supports testing failed payment scenarios (`simulate_failure: true`) without deducting seat inventory.
 - **Resilient Live Status Fallback:** Automatically falls back from the AirLabs API to schedule-based flight status if the API key is missing or unreachable.
 
-## Troubleshooting
-
-| Issue | Solution |
-| :--- | :--- |
-| `password authentication failed for user "postgres"` | Ensure `DB_PASSWORD` in `backend/.env` matches your local PostgreSQL password. |
-| Celery fails with `No module named 'packaging'` | Activate your virtual environment and run `pip install packaging`. |
-| Celery cannot connect to Redis | Start the Redis container with `docker start airbooking-redis`. |
-| Approval email does not arrive in inbox | Verify `EMAIL_*` settings in `backend/.env` (Gmail requires a 16-character App Password) or inspect the Celery worker terminal when using the console backend. |
-| Login fails with pending approval message | Log in as `admin` at `/admin/login` and approve the user account first. |
-| Live flight status displays `Simulated` | Provide a valid `AIRLABS_API_KEY` in `backend/.env`, or use simulated mode for local testing. |
