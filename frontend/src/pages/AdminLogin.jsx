@@ -68,13 +68,6 @@ export default function AdminLogin() {
       <p className="muted center">
         Staff? You can <Link to="/login">log in as a user</Link>.
       </p>
-
-      <div className="demo-hint">
-        <strong>Staff login</strong>
-        <ul>
-          <li>admin / admin123</li>
-        </ul>
-      </div>
     </div>
   );
 }

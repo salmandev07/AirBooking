@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { errorMessage } from "../api";
 import { useAuth } from "../context/AuthContext";
 
-export default function LoginPage() {
+export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -70,16 +70,9 @@ export default function LoginPage() {
 
       <p className="muted center">
         No account yet? <Link to="/register">Register here</Link>
+        &nbsp;&nbsp;Admin?{" "}
+        <Link to="/admin/login" className="btn btn-ghost">Admin login</Link>
       </p>
-
-      <div className="demo-hint">
-        <strong>Demo logins</strong>
-        <ul>
-          <li>admin / admin123 (admin)</li>
-          <li>demo / demo123 (user)</li>
-          <li>newuser / newuser123 (pending approval)</li>
-        </ul>
-      </div>
     </div>
   );
 }
