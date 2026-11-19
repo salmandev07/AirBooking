@@ -158,12 +158,12 @@ export default function BookFlight() {
         <div className="row">
           <label>
             Passenger name
-            <input value={name} onChange={(e) => setName(e.target.value)} required />
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" required />
           </label>
 
           <label>
             Email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" required />
           </label>
         </div>
 
@@ -174,6 +174,7 @@ export default function BookFlight() {
             min="1"
             max={Math.min(10, flight.available_seats)}
             value={seats}
+            placeholder="1"
             onChange={(e) => setSeats(Math.max(1, Number(e.target.value)))}
           />
         </label>

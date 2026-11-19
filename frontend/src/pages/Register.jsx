@@ -91,22 +91,22 @@ export default function Register() {
         <div className="row">
           <label>
             First name
-            <input value={form.first_name} onChange={update("first_name")} />
+            <input value={form.first_name} onChange={update("first_name")} placeholder="First name" />
           </label>
           <label>
             Last name
-            <input value={form.last_name} onChange={update("last_name")} />
+            <input value={form.last_name} onChange={update("last_name")} placeholder="Last name" />
           </label>
         </div>
 
         <label>
           Username *
-          <input value={form.username} onChange={update("username")} autoComplete="username" />
+          <input value={form.username} onChange={update("username")} placeholder="username" autoComplete="username" />
         </label>
 
         <label>
           Email *
-          <input type="email" value={form.email} onChange={update("email")} autoComplete="email" />
+          <input type="email" value={form.email} onChange={update("email")} placeholder="you@example.com" autoComplete="email" />
         </label>
 
         <label>
@@ -117,10 +117,10 @@ export default function Register() {
         <div className="row">
           <label>
             Password * <span className="muted">(min 6)</span>
-            <input type="password" value={form.password} onChange={update("password")} autoComplete="new-password" />
+            <input type="password" value={form.password} onChange={update("password")} placeholder="password" autoComplete="new-password" />
           </label>
           <label>
-            Repeat password *
+            Confirm Password *
             <input type="password" value={form.password2} onChange={update("password2")} autoComplete="new-password" />
           </label>
         </div>

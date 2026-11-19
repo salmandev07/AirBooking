@@ -238,7 +238,7 @@ function FlightsTab() {
             </label>
             <label>
               Airline
-              <input value={form.airline} onChange={update("airline")} required />
+              <input value={form.airline} onChange={update("airline")} placeholder="Air India" required />
             </label>
           </div>
           <div className="row">
@@ -264,21 +264,21 @@ function FlightsTab() {
           <div className="row">
             <label>
               Departure
-              <input type="datetime-local" value={form.departure_time} onChange={update("departure_time")} required />
+              <input type="datetime-local" value={form.departure_time} onChange={update("departure_time")} placeholder="2026-11-25T08:00" required />
             </label>
             <label>
               Arrival
-              <input type="datetime-local" value={form.arrival_time} onChange={update("arrival_time")} required />
+              <input type="datetime-local" value={form.arrival_time} onChange={update("arrival_time")} placeholder="2026-11-25T09:30" required />
             </label>
           </div>
           <div className="row">
             <label>
               Price (INR)
-              <input type="number" min="0" value={form.price} onChange={update("price")} required />
+              <input type="number" min="0" value={form.price} onChange={update("price")} placeholder="5000" required />
             </label>
             <label>
               Total seats
-              <input type="number" min="1" value={form.total_seats} onChange={update("total_seats")} required />
+              <input type="number" min="1" value={form.total_seats} onChange={update("total_seats")} placeholder="180" required />
             </label>
           </div>
           <button className="btn btn-primary">Create flight</button>

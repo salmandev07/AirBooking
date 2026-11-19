@@ -46,6 +46,7 @@ export default function AdminLogin() {
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="admin"
             autoComplete="username"
           />
         </label>
@@ -56,6 +57,7 @@ export default function AdminLogin() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
             autoComplete="current-password"
           />
         </label>
