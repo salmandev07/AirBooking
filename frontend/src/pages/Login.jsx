@@ -56,7 +56,7 @@ export default function Login() {
         <label style={{ display: "flex", alignItems: "center" }}>
           Password
           <input
-            style={{ flex: 1, marginRight: 8 }}
+            style={{ flex: 1, marginRight: 8, paddingRight: 30 }}
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -65,11 +65,21 @@ export default function Login() {
           />
           <button
             type="button"
-            className="btn btn-link text-muted fs-7 small"
+            className="btn btn-link text-muted fs-7 small p-0 m-0"
             onClick={() => setShowPassword((s) => !s)}
-            style={{ marginLeft: 4 }}
+            style={{ width: 24, height: 24, padding: 0, marginLeft: 4, background: "transparent", border: "none" }}
           >
-            {showPassword ? "Hide" : "Show"} password
+            <svg
+              width={20}
+              height={20}
+              viewBox="0 0 24 24"
+              fill={currentColor}
+              stroke={currentColor}
+              strokeWidth={2}
+            >
+              <path d="M1 12s4-8 8-8 8 4 8 4-4 8-8 8z" />
+              <circle cx="8" cy="8" r="3" />
+            </svg>
           </button>
         </label>
 
