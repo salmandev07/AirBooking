@@ -33,7 +33,7 @@ function AppLayout() {
       <main className="container">
         <Outlet />
       </main>
-      <footer className="footer">Air Booking - Django and React project</footer>
+      <footer className="footer">Air Booking</footer>
     </div>
   );
 }

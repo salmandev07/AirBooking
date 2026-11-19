@@ -13,9 +13,7 @@ export default function BookFlight() {
   const [flight, setFlight] = useState(null);
   const [live, setLive] = useState(null);
   const [seats, setSeats] = useState(1);
-  const [name, setName] = useState(
-    user.first_name ? `${user.first_name} ${user.last_name}` : user.username
-  );
+  const [name, setName] = useState(user.username);
   const [email, setEmail] = useState(user.email || "");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);

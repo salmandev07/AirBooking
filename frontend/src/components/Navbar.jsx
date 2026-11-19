@@ -37,7 +37,7 @@ export default function Navbar() {
           <>
             {!isAdmin && (
               <span className="nav-user">
-                {user.first_name || user.username}
+                {user.username}
                 <span className="badge badge-green">{user.approval_status}</span>
               </span>
             )}
