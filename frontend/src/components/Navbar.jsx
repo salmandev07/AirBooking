@@ -32,10 +32,12 @@ export default function Navbar() {
       <div className="nav-auth">
         {isLoggedIn ? (
           <>
-            <span className="nav-user">
-              {user.first_name || user.username}
-              <span className="badge badge-green">{user.approval_status}</span>
-            </span>
+            {!isAdmin && (
+              <span className="nav-user">
+                {user.first_name || user.username}
+                <span className="badge badge-green">{user.approval_status}</span>
+              </span>
+            )}
             <button className="btn btn-outline" onClick={handleLogout}>Logout</button>
           </>
         ) : (
