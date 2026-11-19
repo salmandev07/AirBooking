@@ -36,7 +36,6 @@ export default function AdminLogin() {
   return (
     <div className="card auth-card">
       <h1>Admin login</h1>
-      <p className="muted">Staff accounts only.</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 

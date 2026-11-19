@@ -1,4 +1,4 @@
-"""Fill the database with a few flights and the demo accounts.
+"""Fill the database with flights and the admin account.
 
     python manage.py seed_data
 """
@@ -54,35 +54,6 @@ class Command(BaseCommand):
             admin.set_password("admin123")
             admin.save()
             self.stdout.write("  + admin / admin123")
-
-        demo, created = User.objects.get_or_create(
-            username="demo",
-            defaults={
-                "email": "demo@airbooking.local",
-                "approval_status": User.APPROVED,
-                "first_name": "Demo",
-                "last_name": "Traveller",
-                "phone": "+91 9876543210",
-            },
-        )
-        if created:
-            demo.set_password("demo123")
-            demo.save()
-            self.stdout.write("  + demo / demo123")
-
-        pending, created = User.objects.get_or_create(
-            username="newuser",
-            defaults={
-                "email": "newuser@airbooking.local",
-                "approval_status": User.PENDING,
-                "first_name": "New",
-                "last_name": "User",
-            },
-        )
-        if created:
-            pending.set_password("newuser123")
-            pending.save()
-            self.stdout.write("  + newuser / newuser123 (pending approval)")
 
     def create_flights(self):
         now = timezone.now()
