@@ -21,6 +21,32 @@ A full-stack flight booking platform built with Django REST Framework on the bac
 - Clear inline success and error alerts on every form, plus a top-level error boundary.
 - The login page accepts a username or an email address.
 
+## Screenshots
+
+Screens from a local run using demo data:
+
+| User login | Registration |
+| :---: | :---: |
+| ![User login](docs/screenshots/01-login.png) | ![Registration](docs/screenshots/02-register.png) |
+
+| Dashboard | Flight search |
+| :---: | :---: |
+| ![Dashboard](docs/screenshots/03-dashboard.png) | ![Flight search results](docs/screenshots/04-search-flights.png) |
+
+| My trips | Book a flight |
+| :---: | :---: |
+| ![My booked trips](docs/screenshots/05-my-trips.png) | ![Booking form](docs/screenshots/06-book-flight.png) |
+
+| Admin dashboard | Forgot password |
+| :---: | :---: |
+| ![Admin dashboard](docs/screenshots/07-admin-dashboard.png) | ![Forgot password](docs/screenshots/08-forgot-password.png) |
+
+| Email confirmation | |
+| :---: | :---: |
+| ![Confirm email](docs/screenshots/09-verify-email.png) | |
+
+**Adding your own screenshots:** copy your PNG/JPG files into `docs/screenshots/` (keep the filenames above, or update the image links here), then commit and push the images together with this README. GitHub renders the images once the files are in the repository.
+
 ## Tech Stack
 
 | Layer | Technologies |
