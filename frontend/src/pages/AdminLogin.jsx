@@ -51,9 +51,10 @@ export default function AdminLogin() {
           />
         </label>
 
-        <label>
+        <label style={{ display: "flex", alignItems: "center" }}>
           Password
           <input
+            style={{ flex: 1, marginRight: 8 }}
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -64,6 +65,7 @@ export default function AdminLogin() {
             type="button"
             className="btn btn-link text-muted fs-7 small"
             onClick={() => setShowPassword((s) => !s)}
+            style={{ marginLeft: 4 }}
           >
             {showPassword ? "Hide" : "Show"} password
           </button>

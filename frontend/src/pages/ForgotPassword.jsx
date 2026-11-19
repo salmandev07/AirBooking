@@ -125,26 +125,29 @@ export default function ForgotPassword() {
               maxLength="6"
             />
           </label>
-          <label>
-            New password
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="min 6 characters"
-              autoComplete="new-password"
-            />
-            <button
-              type="button"
-              className="btn btn-link text-muted fs-7 small"
-              onClick={() => setShowPassword((s) => !s)}
-            >
-              {showPassword ? "Hide" : "Show"} password
-            </button>
-          </label>
-          <label>
+          <label style={{ display: "flex", alignItems: "center" }}>
+          New password
+          <input
+            style={{ flex: 1, marginRight: 8 }}
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="min 6 characters"
+            autoComplete="new-password"
+          />
+          <button
+            type="button"
+            className="btn btn-link text-muted fs-7 small"
+            onClick={() => setShowPassword((s) => !s)}
+            style={{ marginLeft: 4 }}
+          >
+            {showPassword ? "Hide" : "Show"} password
+          </button>
+        </label>
+        <label style={{ display: "flex", alignItems: "center" }}>
             Confirm password
             <input
+              style={{ flex: 1, marginRight: 8 }}
               type={showPassword2 ? "text" : "password"}
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
@@ -155,6 +158,7 @@ export default function ForgotPassword() {
               type="button"
               className="btn btn-link text-muted fs-7 small"
               onClick={() => setShowPassword2((s) => !s)}
+              style={{ marginLeft: 4 }}
             >
               {showPassword2 ? "Hide" : "Show"} password
             </button>
