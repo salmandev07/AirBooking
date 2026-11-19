@@ -26,31 +26,21 @@ const EMPTY_FLIGHT = {
   status: "On Time",
 };
 
-// The admin dashboard: approve users, manage flights, see statistics.
-export default function AdminPage() {
+export default function AdminDashboard() {
   const [tab, setTab] = useState("users");
 
   return (
     <div>
       <div className="page-head">
-        <h1>Admin dashboard</h1>
+        <h1>Admin Dashboard</h1>
         <div className="tabs">
-          <button
-            className={`tab ${tab === "users" ? "active" : ""}`}
-            onClick={() => setTab("users")}
-          >
+          <button className={`tab ${tab === "users" ? "active" : ""}`} onClick={() => setTab("users")}>
             Users
           </button>
-          <button
-            className={`tab ${tab === "flights" ? "active" : ""}`}
-            onClick={() => setTab("flights")}
-          >
+          <button className={`tab ${tab === "flights" ? "active" : ""}`} onClick={() => setTab("flights")}>
             Flights
           </button>
-          <button
-            className={`tab ${tab === "stats" ? "active" : ""}`}
-            onClick={() => setTab("stats")}
-          >
+          <button className={`tab ${tab === "stats" ? "active" : ""}`} onClick={() => setTab("stats")}>
             Statistics
           </button>
         </div>
@@ -130,9 +120,7 @@ function UsersTab() {
               <tr key={u.id}>
                 <td>
                   <strong>{u.username}</strong>
-                  <div className="muted small">
-                    {u.first_name} {u.last_name}
-                  </div>
+                  <div className="muted small">{u.first_name} {u.last_name}</div>
                 </td>
                 <td>{u.email}</td>
                 <td>{u.phone || "-"}</td>
@@ -233,7 +221,7 @@ function FlightsTab() {
           )}
         </div>
         <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Close form" : "+ New flight"}
+          {showForm ? "Close form" : "New flight"}
         </button>
       </div>
 
@@ -317,9 +305,9 @@ function FlightsTab() {
                   <strong>{f.flight_number}</strong>
                   <div className="muted small">{f.airline}</div>
                 </td>
-                <td>{f.origin_code} → {f.destination_code}</td>
+                <td>{f.origin_code} to {f.destination_code}</td>
                 <td className="small">{new Date(f.departure_time).toLocaleString()}</td>
-                <td>₹{Number(f.price).toLocaleString()}</td>
+                <td>Rs. {Number(f.price).toLocaleString()}</td>
                 <td className={f.available_seats < 20 ? "low-text" : ""}>{f.available_seats}</td>
                 <td><StatusBadge status={f.status} /></td>
                 <td>
@@ -357,10 +345,8 @@ function StatsTab() {
   if (!stats) return <div className="page-loading">Loading statistics...</div>;
 
   const occupancy =
-    stats.total_seats > 0
-      ? (stats.booked_seats / stats.total_seats) * 100
-      : 0;
-  // Show a decimal below 1% so "3 of 1940 seats" does not read as 0%.
+    stats.total_seats > 0 ? (stats.booked_seats / stats.total_seats) * 100 : 0;
+  // Below 1% a whole number reads as 0%, so keep one decimal.
   const occupancyLabel =
     occupancy > 0 && occupancy < 1 ? occupancy.toFixed(1) : Math.round(occupancy);
 

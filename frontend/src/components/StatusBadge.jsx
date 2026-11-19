@@ -1,4 +1,4 @@
-// Turns the backend status strings into coloured pills.
+// Maps backend status strings to a coloured pill.
 const COLORS = {
   "On Time": "green",
   Delayed: "red",

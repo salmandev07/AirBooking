@@ -13,9 +13,7 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <Link to="/" className="brand">
-        ✈ Air Booking
-      </Link>
+      <Link to="/" className="brand">Air Booking</Link>
 
       <nav className="nav-links">
         {isLoggedIn && (
@@ -33,11 +31,9 @@ export default function Navbar() {
           <>
             <span className="nav-user">
               {user.first_name || user.username}
-              <span className="badge badge-green">approved</span>
+              <span className="badge badge-green">{user.approval_status}</span>
             </span>
-            <button className="btn btn-outline" onClick={handleLogout}>
-              Logout
-            </button>
+            <button className="btn btn-outline" onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>

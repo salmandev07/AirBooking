@@ -5,7 +5,6 @@ import api, { errorMessage } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import { useAuth } from "../context/AuthContext";
 
-// Small welcome screen with the user's booking numbers.
 export default function Dashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
@@ -22,12 +21,12 @@ export default function Dashboard() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Hello, {user.first_name || user.username} 👋</h1>
+          <h1>Hello, {user.first_name || user.username}</h1>
           <p className="muted">
-            Account status: <StatusBadge status={user.approval_status} /> Ready to fly?
+            Account status: <StatusBadge status={user.approval_status} />
           </p>
         </div>
-        <Link to="/search" className="btn btn-primary">Search flights</Link>
+        <Link to="/search" className="btn btn-primary">Search Flights</Link>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -48,12 +47,12 @@ export default function Dashboard() {
       </div>
 
       <div className="card">
-        <h2>How this works</h2>
+        <h2>Booking steps</h2>
         <ol className="steps">
           <li>Search flights by airport, date and price.</li>
-          <li>Pick a flight and choose how many seats you want.</li>
-          <li>Pay (simulated) and get an instant booking reference.</li>
-          <li>Track everything under <Link to="/trips">My Trips</Link>.</li>
+          <li>Choose a flight and how many seats you need.</li>
+          <li>Complete the simulated payment to get a booking reference.</li>
+          <li>Manage everything under <Link to="/trips">My Trips</Link>.</li>
         </ol>
       </div>
     </div>

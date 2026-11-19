@@ -5,8 +5,7 @@ import api, { errorMessage } from "../api";
 import StatusBadge from "../components/StatusBadge";
 import { useAuth } from "../context/AuthContext";
 
-// Step 2 + 3 of the booking flow: pick seats and "pay".
-export default function BookPage() {
+export default function BookFlight() {
   const { flightId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -14,7 +13,9 @@ export default function BookPage() {
   const [flight, setFlight] = useState(null);
   const [live, setLive] = useState(null);
   const [seats, setSeats] = useState(1);
-  const [name, setName] = useState(user.first_name ? `${user.first_name} ${user.last_name}` : user.username);
+  const [name, setName] = useState(
+    user.first_name ? `${user.first_name} ${user.last_name}` : user.username
+  );
   const [email, setEmail] = useState(user.email || "");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -27,7 +28,7 @@ export default function BookPage() {
       .catch((err) => setError(errorMessage(err)));
   }, [flightId]);
 
-  // Poll the live status so the badge keeps updating while the page is open.
+  // Poll the status endpoint so the badge keeps updating on this page.
   useEffect(() => {
     let cancelled = false;
 
@@ -36,7 +37,7 @@ export default function BookPage() {
         const { data } = await api.get(`/flights/${flightId}/status/`);
         if (!cancelled) setLive(data);
       } catch {
-        // Status is a nice-to-have, ignore failures.
+        // Status is optional, ignore failures.
       }
     }
 
@@ -59,26 +60,35 @@ export default function BookPage() {
 
   if (!flight) return <div className="page-loading">Loading flight...</div>;
 
-  // Already booked - show the receipt instead of the form.
   if (confirmed) {
     return (
       <div className="card auth-card">
-        <h1>Booking confirmed ✅</h1>
+        <h1>Booking confirmed</h1>
         <div className="alert alert-success">{confirmed.message}</div>
 
         <div className="receipt">
           <div><span>Reference</span><strong>{confirmed.reference}</strong></div>
           <div><span>Flight</span><strong>{confirmed.flight.flight_number}</strong></div>
-          <div><span>Route</span><strong>{confirmed.flight.origin_code} → {confirmed.flight.destination_code}</strong></div>
+          <div>
+            <span>Route</span>
+            <strong>{confirmed.flight.origin_code} to {confirmed.flight.destination_code}</strong>
+          </div>
           <div><span>Passenger</span><strong>{confirmed.passenger_name}</strong></div>
           <div><span>Seats</span><strong>{confirmed.seats}</strong></div>
-          <div><span>Total paid</span><strong>₹{Number(confirmed.total_amount).toLocaleString()}</strong></div>
+          <div>
+            <span>Total paid</span>
+            <strong>Rs. {Number(confirmed.total_amount).toLocaleString()}</strong>
+          </div>
           <div><span>Payment</span><strong>{confirmed.payment_status}</strong></div>
         </div>
 
         <div className="row">
-          <button className="btn btn-primary" onClick={() => navigate("/trips")}>View my trips</button>
-          <button className="btn btn-outline" onClick={() => navigate("/search")}>Book another</button>
+          <button className="btn btn-primary" onClick={() => navigate("/trips")}>
+            View my trips
+          </button>
+          <button className="btn btn-outline" onClick={() => navigate("/search")}>
+            Book another flight
+          </button>
         </div>
       </div>
     );
@@ -108,7 +118,7 @@ export default function BookPage() {
 
   return (
     <div>
-      <Link to="/search" className="back-link">← Back to search</Link>
+      <Link to="/search" className="back-link">Back to search</Link>
 
       <div className="card">
         <div className="flight-top">
@@ -124,7 +134,7 @@ export default function BookPage() {
             <span className="muted">{flight.origin}</span>
             <span className="muted">{new Date(flight.departure_time).toLocaleString()}</span>
           </div>
-          <div className="route-line">→</div>
+          <div className="route-line">to</div>
           <div>
             <span className="code">{flight.destination_code}</span>
             <span className="muted">{flight.destination}</span>
@@ -133,7 +143,7 @@ export default function BookPage() {
         </div>
 
         <div className="flight-bottom">
-          <span className="price">₹{Number(flight.price).toLocaleString()} / seat</span>
+          <span className="price">Rs. {Number(flight.price).toLocaleString()} / seat</span>
           <span className={`seats ${flight.available_seats < 20 ? "low" : ""}`}>
             {flight.available_seats} seats available
           </span>
@@ -170,15 +180,15 @@ export default function BookPage() {
 
         <div className="total-box">
           <span>Total amount</span>
-          <strong>₹{total.toLocaleString()}</strong>
+          <strong>Rs. {total.toLocaleString()}</strong>
         </div>
 
         <button className="btn btn-primary btn-block" disabled={busy || flight.available_seats < 1}>
-          {busy ? "Processing payment..." : "Pay & confirm (simulated)"}
+          {busy ? "Processing payment..." : "Pay and confirm (simulated)"}
         </button>
 
         <p className="muted small center">
-          Payment is simulated for this demo - no card details are collected.
+          Payment is simulated for this demo. No card details are collected.
         </p>
       </form>
     </div>

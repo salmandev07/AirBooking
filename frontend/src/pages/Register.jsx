@@ -14,7 +14,7 @@ const EMPTY = {
   password2: "",
 };
 
-export default function RegisterPage() {
+export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ export default function RegisterPage() {
     return (event) => setForm({ ...form, [field]: event.target.value });
   }
 
-  // Quick client side checks so the user finds typos before hitting the API.
+  // Catch typos before the request goes out.
   function validate() {
     if (!form.username || !form.email || !form.password) {
       return "Username, email and password are required.";
@@ -68,10 +68,10 @@ export default function RegisterPage() {
   if (done) {
     return (
       <div className="card auth-card">
-        <h1>Registration received 🎉</h1>
+        <h1>Registration submitted</h1>
         <div className="alert alert-success">
           Your account was created and is now <strong>pending admin approval</strong>.
-          You will get an email as soon as an administrator reviews it.
+          You will get an email once an administrator reviews it.
         </div>
         <button className="btn btn-primary btn-block" onClick={() => navigate("/login")}>
           Go to login

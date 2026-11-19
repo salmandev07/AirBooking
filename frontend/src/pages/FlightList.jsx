@@ -14,7 +14,7 @@ const AIRPORTS = [
   { code: "GOI", name: "Goa - Dabolim" },
 ];
 
-export default function SearchPage() {
+export default function FlightList() {
   const [filters, setFilters] = useState({
     origin: "",
     destination: "",
@@ -37,10 +37,10 @@ export default function SearchPage() {
     setError("");
     setBusy(true);
 
-    // Build the query string only from the fields the user actually filled.
+    // Only send the fields the user actually filled in.
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== "" && value !== undefined) params.append(key, value);
+      if (value) params.append(key, value);
     });
 
     try {
@@ -63,7 +63,7 @@ export default function SearchPage() {
   return (
     <div>
       <div className="page-head">
-        <h1>Search flights</h1>
+        <h1>Search Flights</h1>
         <button className="btn btn-outline" onClick={reset}>Clear</button>
       </div>
 
@@ -103,7 +103,7 @@ export default function SearchPage() {
               min="0"
               value={filters.max_price}
               onChange={update("max_price")}
-              placeholder="e.g. 5000"
+              placeholder="5000"
             />
           </label>
 
@@ -150,7 +150,7 @@ export default function SearchPage() {
                     <span className="code">{f.origin_code}</span>
                     <span className="muted">{new Date(f.departure_time).toLocaleString()}</span>
                   </div>
-                  <div className="route-line">→</div>
+                  <div className="route-line">to</div>
                   <div>
                     <span className="code">{f.destination_code}</span>
                     <span className="muted">{new Date(f.arrival_time).toLocaleString()}</span>
@@ -159,15 +159,13 @@ export default function SearchPage() {
 
                 <div className="flight-bottom">
                   <div>
-                    <span className="price">₹{Number(f.price).toLocaleString()}</span>
+                    <span className="price">Rs. {Number(f.price).toLocaleString()}</span>
                     <span className="muted"> / seat</span>
                     <span className={`seats ${f.available_seats < 20 ? "low" : ""}`}>
                       {f.available_seats} left
                     </span>
                   </div>
-                  <Link to={`/book/${f.id}`} className="btn btn-primary">
-                    Book now
-                  </Link>
+                  <Link to={`/book/${f.id}`} className="btn btn-primary">Book now</Link>
                 </div>
               </div>
             ))}

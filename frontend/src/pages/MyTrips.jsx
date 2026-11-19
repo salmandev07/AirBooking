@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import api, { errorMessage } from "../api";
 import StatusBadge from "../components/StatusBadge";
 
-// "My Trips" - every booking of the logged in user with live status.
 export default function MyTrips() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +22,7 @@ export default function MyTrips() {
     load();
   }, [load]);
 
-  // Refresh the flight status of every open booking every 20 seconds.
+  // Refresh the flight status of open bookings every 20 seconds.
   useEffect(() => {
     const timer = setInterval(() => {
       bookings
@@ -49,7 +48,7 @@ export default function MyTrips() {
 
   async function cancelBooking(booking) {
     const ok = window.confirm(
-      `Cancel booking ${booking.reference}? Your seat will be released and the payment refunded.`
+      `Cancel booking ${booking.reference}? The seat will be released and the payment refunded.`
     );
     if (!ok) return;
 
@@ -69,7 +68,7 @@ export default function MyTrips() {
   return (
     <div>
       <div className="page-head">
-        <h1>My Trips</h1>
+        <h1>My Booked Trips</h1>
         <Link to="/search" className="btn btn-primary">Book a new flight</Link>
       </div>
 
@@ -78,7 +77,7 @@ export default function MyTrips() {
 
       {bookings.length === 0 && (
         <div className="card empty">
-          <p>You have not booked anything yet.</p>
+          <p>You have not booked any flights yet.</p>
           <Link to="/search" className="btn btn-outline">Find a flight</Link>
         </div>
       )}
@@ -102,7 +101,7 @@ export default function MyTrips() {
                 <span className="code">{b.flight.origin_code}</span>
                 <span className="muted">{new Date(b.flight.departure_time).toLocaleString()}</span>
               </div>
-              <div className="route-line">→</div>
+              <div className="route-line">to</div>
               <div>
                 <span className="code">{b.flight.destination_code}</span>
                 <span className="muted">{new Date(b.flight.arrival_time).toLocaleString()}</span>
@@ -110,10 +109,10 @@ export default function MyTrips() {
             </div>
 
             <div className="trip-meta">
-              <span>{b.flight.flight_number} · {b.flight.airline}</span>
+              <span>{b.flight.flight_number} - {b.flight.airline}</span>
               <span>{b.seats} seat(s)</span>
-              <span>₹{Number(b.total_amount).toLocaleString()}</span>
-              <span>Live: <StatusBadge status={b.flight.status} /></span>
+              <span>Rs. {Number(b.total_amount).toLocaleString()}</span>
+              <span>Live status: <StatusBadge status={b.flight.status} /></span>
             </div>
 
             {b.status === "Confirmed" && (
