@@ -9,6 +9,8 @@ export default function MyTrips() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [cancelling, setCancelling] = useState(false);
 
   const load = useCallback(() => {
     api
@@ -46,20 +48,29 @@ export default function MyTrips() {
     return () => clearInterval(timer);
   }, [bookings]);
 
-  async function cancelBooking(booking) {
-    const ok = window.confirm(
-      `Cancel booking ${booking.reference}? The seat will be released and the payment refunded.`
-    );
-    if (!ok) return;
+  function askCancel(booking) {
+    setCancelTarget(booking);
+  }
+
+  function closeModal() {
+    if (!cancelling) setCancelTarget(null);
+  }
+
+  async function confirmCancel() {
+    if (!cancelTarget) return;
 
     setNotice("");
     setError("");
+    setCancelling(true);
     try {
-      const { data } = await api.post(`/bookings/${booking.id}/cancel/`);
+      const { data } = await api.post(`/bookings/${cancelTarget.id}/cancel/`);
       setNotice(`Booking ${data.reference} cancelled.`);
+      setCancelTarget(null);
       load();
     } catch (err) {
       setError(errorMessage(err));
+    } finally {
+      setCancelling(false);
     }
   }
 
@@ -117,7 +128,7 @@ export default function MyTrips() {
 
             {b.status === "Confirmed" && (
               <div className="trip-actions">
-                <button className="btn btn-danger" onClick={() => cancelBooking(b)}>
+                <button className="btn btn-danger" onClick={() => askCancel(b)}>
                   Cancel booking
                 </button>
               </div>
@@ -125,6 +136,26 @@ export default function MyTrips() {
           </div>
         ))}
       </div>
+
+      {cancelTarget && (
+        <div className="modal-backdrop" onClick={closeModal}>
+          <div className="modal card" onClick={(e) => e.stopPropagation()}>
+            <h2>Cancel booking?</h2>
+            <p className="muted">
+              Booking {cancelTarget.reference} will be cancelled. The seat will be
+              released and the payment refunded.
+            </p>
+            <div className="modal-actions">
+              <button className="btn" onClick={closeModal} disabled={cancelling}>
+                Keep booking
+              </button>
+              <button className="btn btn-danger" onClick={confirmCancel} disabled={cancelling}>
+                {cancelling ? "Cancelling..." : "Yes, cancel"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
