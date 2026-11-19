@@ -76,7 +76,11 @@ function UsersTab() {
     setError("");
     try {
       const { data } = await api.post(`/admin/users/${id}/${action}/`);
-      setNotice(`${data.username} is now ${data.approval_status}. Email queued via Celery.`);
+      setNotice(
+        action === "approve"
+          ? `${data.username} has been approved successfully.`
+          : `${data.username} has been rejected.`
+      );
       load();
     } catch (err) {
       setError(errorMessage(err));
