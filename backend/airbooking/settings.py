@@ -135,12 +135,16 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ---------------------------------------------------------------- email
-# The console backend prints mails to the terminal so the approval flow can
-# be tested without a real mail server. Swap it for SMTP in production.
+# Mails are sent with SMTP (smtp.gmail.com for local testing).
 EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
     "django.core.mail.backends.console.EmailBackend",
 )
+EMAIL_HOST = env("EMAIL_HOST", "localhost")
+EMAIL_PORT = int(env("EMAIL_PORT", 25))
+EMAIL_HOST_USER = env("EMAIL_USER", "")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", "")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", "True") == "True"
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "no-reply@airbooking.local")
 
 # ---------------------------------------------------------------- celery
