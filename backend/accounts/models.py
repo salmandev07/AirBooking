@@ -16,6 +16,7 @@ class User(AbstractUser):
     ]
 
     email = models.EmailField(unique=True)
+    email_verified = models.BooleanField(default=False)
     approval_status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -43,3 +44,17 @@ class PasswordResetOTP(models.Model):
 
     def __str__(self):
         return f"OTP for {self.user.username}"
+
+
+class EmailVerificationOTP(models.Model):
+    """One-time code sent at registration to confirm the email address."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verify_otps")
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Email verification for {self.user.username}"

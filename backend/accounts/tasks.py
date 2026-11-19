@@ -62,6 +62,28 @@ def send_approval_email(user_id, approved=True):
     return "sent"
 
 @shared_task
+def send_verification_email(email, code):
+    """Send the registration confirmation code."""
+    subject = "Confirm your Air Booking email"
+    message = (
+        f"Welcome to Air Booking!\n\n"
+        f"Your email confirmation code is: {code}\n\n"
+        "It expires in 10 minutes. Enter it on the confirm-email page to "
+        "verify your address.\n\n"
+        "- Air Booking team"
+    )
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+    logger.info("Sent verification email to %s", email)
+    return "sent"
+
+
+@shared_task
 def send_otp_email(email, code):
     """Send the password reset code to the user's email."""
     subject = "Your Air Booking password reset code"

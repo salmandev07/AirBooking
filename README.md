@@ -4,7 +4,7 @@ A full-stack flight booking platform built with Django REST Framework on the bac
 
 ## Features
 
-- **User Registration & Admin Approval:** New accounts start with a `pending` status and can only log in after an administrator approves them.
+- **User Registration, Email Confirmation & Admin Approval:** Registration emails a 6-digit OTP that must be entered to confirm the email address. New accounts then stay `pending` until an administrator approves them.
 - **JWT Authentication:** Access and refresh tokens with automatic token rotation and blacklisting on logout.
 - **Flight Search & Filtering:** Search available flights by origin, destination, departure date, maximum price, and seat availability.
 - **Seat-Safe Booking System:** Reserves seats inside atomic database transactions (`select_for_update`) to prevent overbooking, processes a simulated payment flow, and generates a booking reference.
@@ -111,7 +111,7 @@ Running `python manage.py seed_data` creates the default administrator account a
 | `admin` | `admin123` | Admin (Staff + Superuser) | `approved` | `http://localhost:5173/admin/login` |
 
 - **Django Admin Panel:** `http://127.0.0.1:8000/admin/` (uses the same credentials).
-- **Testing User Approval:** Register a new account at `http://localhost:5173/register` (created as `pending`), approve it from the Admin Dashboard, and then log in at `http://localhost:5173/login`.
+- **Testing User Approval:** Register a new account at `http://localhost:5173/register`, enter the 6-digit code emailed to you on the confirm-email page, then approve the account from the Admin Dashboard and log in at `http://localhost:5173/login`.
 
 ## Environment Configuration
 
@@ -149,12 +149,16 @@ All endpoints return JSON. Protected endpoints require the `Authorization: Beare
 
 | Method | Endpoint | Access | Request / Response Details |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register/` | Public | Body: `{username, email, password, password2, first_name, last_name, phone}`. Returns `201 Created` with status `pending`. |
-| `POST` | `/api/auth/login/` | Public | Body: `{username, password}`. Returns `{access, refresh, user}`, or `403` if not approved. |
+| `POST` | `/api/auth/register/` | Public | Body: `{username, email, password, password2, first_name, last_name, phone}`. Returns `201 Created` with status `pending` and emails a 6-digit email-confirmation code. |
+| `POST` | `/api/auth/verify-email/` | Public | Body: `{email, otp}`. Confirms the registration code and marks the email as verified (codes expire after 10 minutes). |
+| `POST` | `/api/auth/resend-verification/` | Public | Body: `{email}`. Sends a new email-confirmation code. |
+| `POST` | `/api/auth/login/` | Public | Body: `{username, password}` (username can also be the email). Returns `{access, refresh, user}`, or `403` if the email is unconfirmed or the account is not approved. |
 | `POST` | `/api/auth/token/refresh/` | Public | Body: `{refresh}`. Returns a new `{access}` token and blacklists the old refresh token. |
 | `GET` | `/api/auth/me/` | Authenticated | Returns the current authenticated user's profile. |
 | `POST` | `/api/auth/logout/` | Authenticated | Body: `{refresh}`. Blacklists the refresh token to end the session. |
 | `POST` | `/api/auth/resend-approval/` | Public | Body: `{email}`. Queues an approval reminder email. |
+| `POST` | `/api/auth/forgot-password/` | Public | Body: `{email}`. Emails a 6-digit password-reset code. |
+| `POST` | `/api/auth/reset-password/` | Public | Body: `{email, otp, password, password2}`. Verifies the code and sets a new password. |
 
 ### Flight Endpoints
 
@@ -194,10 +198,11 @@ All endpoints return JSON. Protected endpoints require the `Authorization: Beare
 ### 1. Registration and Admin Approval
 
 1. A visitor submits the registration form at `/register`, creating an account with `approval_status = pending`.
-2. Attempting to log in before approval returns `403 Forbidden`.
-3. An admin logs in at `/admin/login`, reviews pending registrations on the Admin Dashboard, and clicks **Approve** or **Reject**.
-4. Django updates the user status and queues a Celery email task via Redis.
-5. Once approved, the user logs in at `/login` and receives JWT access and refresh tokens.
+2. The backend generates a 6-digit code and emails it via Celery. The visitor enters it on `/verify-email` to confirm the address (`email_verified = true`).
+3. Attempting to log in before email confirmation or before approval returns `403 Forbidden` with a clear message.
+4. An admin logs in at `/admin/login`, reviews pending registrations on the Admin Dashboard, and clicks **Approve** or **Reject**.
+5. Django updates the user status and queues a Celery email task via Redis.
+6. Once approved, the user logs in at `/login` and receives JWT access and refresh tokens.
 
 ### 2. Flight Search, Booking, and Trip Management
 

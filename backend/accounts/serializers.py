@@ -42,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "phone",
+            "email_verified",
             "approval_status",
             "is_superuser",
             "created_at",

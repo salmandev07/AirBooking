@@ -10,9 +10,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import PasswordResetOTP
+from .models import EmailVerificationOTP, PasswordResetOTP
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
-from .tasks import send_approval_email, send_otp_email
+from .tasks import send_approval_email, send_otp_email, send_verification_email
 
 User = get_user_model()
 
@@ -29,10 +29,15 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
+        # Send a 6-digit code so the user can confirm the email address.
+        code = get_random_string(length=6, allowed_chars="0123456789")
+        EmailVerificationOTP.objects.create(user=user, code=code)
+        send_verification_email.delay(user.email, code)
+
         data = UserSerializer(user).data
         data["message"] = (
-            "Registration received. Your account is pending admin approval "
-            "and you will get an email once it is reviewed."
+            f"We sent a 6-digit code to {user.email}. "
+            "Enter it to confirm your email address."
         )
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -54,6 +59,19 @@ class LoginView(TokenObtainPairView):
             return Response(
                 {"detail": "Invalid username or password."},
                 status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # The email must be confirmed before the account can be used.
+        # Admin accounts skip this check.
+        if not (user.is_staff or user.is_superuser) and not user.email_verified:
+            return Response(
+                {
+                    "detail": (
+                        "Please confirm your email address first. "
+                        "Check your inbox for the 6-digit code."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         # A pending or rejected user knows the right password but still
@@ -126,6 +144,53 @@ class ForgotPasswordView(APIView):
             PasswordResetOTP.objects.create(user=user, code=code)
             send_otp_email.delay(user.email, code)
         return Response({"detail": f"OTP sent to {email}"})
+
+
+class VerifyEmailView(APIView):
+    """POST /api/auth/verify-email/ - confirm the registration code."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email", "")
+        otp = request.data.get("otp", "")
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
+            return Response({"detail": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
+        if user.email_verified:
+            return Response(
+                {"detail": "This email is already confirmed. You can log in once an admin approves your account."}
+            )
+
+        verification = user.verify_otps.order_by("-created_at").first()
+        if (
+            not verification
+            or verification.code != str(otp)
+            or timezone.now() - verification.created_at > timedelta(minutes=10)
+        ):
+            return Response({"detail": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.email_verified = True
+        user.save(update_fields=["email_verified"])
+        user.verify_otps.all().delete()
+        return Response(
+            {"detail": "Email confirmed. Your account is now waiting for admin approval."}
+        )
+
+
+class ResendVerificationView(APIView):
+    """POST /api/auth/resend-verification/ - send a new confirmation code."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email", "")
+        user = User.objects.filter(email__iexact=email).first()
+        if user and not user.email_verified:
+            code = get_random_string(length=6, allowed_chars="0123456789")
+            EmailVerificationOTP.objects.create(user=user, code=code)
+            send_verification_email.delay(user.email, code)
+        return Response({"detail": f"If {email} needs confirmation, a new code was sent."})
 
 
 class ResetPasswordView(APIView):

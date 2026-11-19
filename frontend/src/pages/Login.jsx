@@ -93,6 +93,8 @@ export default function Login() {
 
       <p className="muted center">
         <Link to="/forgot-password">Forgot password?</Link>
+        &nbsp;&nbsp;
+        <Link to="/verify-email">Confirm email</Link>
       </p>
 
       <p className="muted center">

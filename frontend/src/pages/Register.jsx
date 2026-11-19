@@ -23,7 +23,6 @@ export default function Register() {
   const [showPassword2, setShowPassword2] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(false);
 
   function update(field) {
     return (event) => setForm({ ...form, [field]: event.target.value });
@@ -59,27 +58,13 @@ export default function Register() {
     setBusy(true);
     try {
       await register(form);
-      setDone(true);
+      // The account is created unverified - confirm the email next.
+      navigate("/verify-email", { state: { email: form.email } });
     } catch (err) {
       setError(errorMessage(err));
     } finally {
       setBusy(false);
     }
-  }
-
-  if (done) {
-    return (
-      <div className="card auth-card">
-        <h1>Registration submitted</h1>
-        <div className="alert alert-success">
-          Your account was created and is now <strong>pending admin approval</strong>.
-          You will get an email once an administrator reviews it.
-        </div>
-        <button className="btn btn-primary btn-block" onClick={() => navigate("/login")}>
-          Go to login
-        </button>
-      </div>
-    );
   }
 
   return (

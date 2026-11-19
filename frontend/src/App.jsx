@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
 import MyTrips from "./pages/MyTrips";
 import Register from "./pages/Register";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function Private({ children }) {
   const { isLoggedIn, loading } = useAuth();
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           <Route path="/" element={<Private><Dashboard /></Private>} />

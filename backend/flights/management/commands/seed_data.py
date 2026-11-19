@@ -43,6 +43,7 @@ class Command(BaseCommand):
             username="admin",
             defaults={
                 "email": "admin@airbooking.local",
+                "email_verified": True,
                 "is_staff": True,
                 "is_superuser": True,
                 "approval_status": User.APPROVED,
