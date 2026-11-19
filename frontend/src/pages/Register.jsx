@@ -19,6 +19,8 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState(EMPTY);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -117,11 +119,67 @@ export default function Register() {
         <div className="row">
           <label>
             Password * <span className="muted">(min 6)</span>
-            <input type="password" value={form.password} onChange={update("password")} placeholder="password" autoComplete="new-password" />
+            <div style={{ position: "relative" }}>
+              <input
+                style={{ width: "100%", paddingRight: 56 }}
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={update("password")}
+                placeholder="password"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: "#2563eb",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  padding: 0,
+                }}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </label>
           <label>
             Confirm Password *
-            <input type="password" value={form.password2} onChange={update("password2")} autoComplete="new-password" />
+            <div style={{ position: "relative" }}>
+              <input
+                style={{ width: "100%", paddingRight: 56 }}
+                type={showPassword2 ? "text" : "password"}
+                value={form.password2}
+                onChange={update("password2")}
+                placeholder="repeat password"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword2((s) => !s)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: "#2563eb",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  padding: 0,
+                }}
+              >
+                {showPassword2 ? "Hide" : "Show"}
+              </button>
+            </div>
           </label>
         </div>
 

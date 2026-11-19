@@ -53,34 +53,37 @@ export default function Login() {
           />
         </label>
 
-        <label style={{ display: "flex", alignItems: "center" }}>
+        <label>
           Password
-          <input
-            style={{ flex: 1, marginRight: 8, paddingRight: 30 }}
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
-            autoComplete="current-password"
-          />
-          <button
-            type="button"
-            className="btn btn-link text-muted fs-7 small p-0 m-0"
-            onClick={() => setShowPassword((s) => !s)}
-            style={{ width: 24, height: 24, padding: 0, marginLeft: 4, background: "transparent", border: "none" }}
-          >
-            <svg
-              width={20}
-              height={20}
-              viewBox="0 0 24 24"
-              fill={currentColor}
-              stroke={currentColor}
-              strokeWidth={2}
+          <div style={{ position: "relative" }}>
+            <input
+              style={{ width: "100%", paddingRight: 56 }}
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              style={{
+                position: "absolute",
+                right: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                color: "#2563eb",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                padding: 0,
+              }}
             >
-              <path d="M1 12s4-8 8-8 8 4 8 4-4 8-8 8z" />
-              <circle cx="8" cy="8" r="3" />
-            </svg>
-          </button>
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
         </label>
 
         <button className="btn btn-primary btn-block" disabled={busy}>
