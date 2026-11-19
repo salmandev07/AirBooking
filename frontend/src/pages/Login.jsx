@@ -69,6 +69,10 @@ export default function Login() {
       </form>
 
       <p className="muted center">
+        <Link to="/forgot-password">Forgot password?</Link>
+      </p>
+
+      <p className="muted center">
         No account yet? <Link to="/register">Register here</Link>
         &nbsp;&nbsp;Admin?{" "}
         <Link to="/admin/login" className="btn btn-ghost">Admin login</Link>

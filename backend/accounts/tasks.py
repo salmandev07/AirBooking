@@ -60,3 +60,22 @@ def send_approval_email(user_id, approved=True):
     )
     logger.info("Sent %s email to %s", "approval" if approved else "rejection", user.email)
     return "sent"
+
+@shared_task
+def send_otp_email(email, code):
+    """Send the password reset code to the user's email."""
+    subject = "Your Air Booking password reset code"
+    message = (
+        f"Your password reset code is: {code}\n\n"
+        "It expires in 10 minutes. If you did not ask for this, ignore this email.\n\n"
+        "- Air Booking team"
+    )
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+    logger.info("Sent OTP email to %s", email)
+    return "sent"

@@ -1,4 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.utils.crypto import get_random_string
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -6,8 +10,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .models import PasswordResetOTP
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
-from .tasks import send_approval_email
+from .tasks import send_approval_email, send_otp_email
 
 User = get_user_model()
 
@@ -104,3 +109,49 @@ class ResendApprovalView(APIView):
             return Response({"detail": "That account is already approved."})
         send_approval_email.delay(user.id, True)
         return Response({"detail": "Reminder queued."})
+
+class ForgotPasswordView(APIView):
+    """POST /api/auth/forgot-password/ - email a 6-digit reset code."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email", "")
+        user = User.objects.filter(email__iexact=email).first()
+        if user:
+            code = get_random_string(length=6, allowed_chars="0123456789")
+            PasswordResetOTP.objects.create(user=user, code=code)
+            send_otp_email.delay(user.email, code)
+        return Response({"detail": "If that email exists, a reset code has been sent."})
+
+
+class ResetPasswordView(APIView):
+    """POST /api/auth/reset-password/ - check the code and set a new password."""
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email", "")
+        otp = request.data.get("otp", "")
+        password = request.data.get("password", "")
+        password2 = request.data.get("password2", "")
+        user = User.objects.filter(email__iexact=email).first()
+        if not user:
+            return Response({"detail": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
+        if password != password2:
+            return Response({"detail": "The two passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+        if len(password) < 6:
+            return Response({"detail": "Password must be at least 6 characters."}, status=status.HTTP_400_BAD_REQUEST)
+
+        reset = user.reset_otps.order_by("-created_at").first()
+        if (
+            not reset
+            or reset.code != str(otp)
+            or timezone.now() - reset.created_at > timedelta(minutes=10)
+        ):
+            return Response({"detail": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(password)
+        user.save(update_fields=["password"])
+        user.reset_otps.all().delete()
+        return Response({"detail": "Password reset successful. You can now log in."})

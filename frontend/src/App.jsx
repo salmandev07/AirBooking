@@ -7,6 +7,7 @@ import AdminLogin from "./pages/AdminLogin";
 import BookFlight from "./pages/BookFlight";
 import Dashboard from "./pages/Dashboard";
 import FlightList from "./pages/FlightList";
+import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
 import MyTrips from "./pages/MyTrips";
 import Register from "./pages/Register";
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           <Route path="/" element={<Private><Dashboard /></Private>} />
           <Route path="/search" element={<Private><FlightList /></Private>} />
