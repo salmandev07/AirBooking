@@ -44,11 +44,11 @@ export default function Login() {
 
       <form onSubmit={handleSubmit}>
         <label>
-          Username
+          Username or email
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="username"
+            placeholder="username or email"
             autoComplete="username"
           />
         </label>

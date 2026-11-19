@@ -43,10 +43,13 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username", "")
+        identifier = request.data.get("username", "")
         password = request.data.get("password", "")
 
-        user = User.objects.filter(username=username).first()
+        # Let people log in with either their username or their email.
+        user = User.objects.filter(username=identifier).first()
+        if user is None:
+            user = User.objects.filter(email__iexact=identifier).first()
         if user is None or not user.check_password(password):
             return Response(
                 {"detail": "Invalid username or password."},
