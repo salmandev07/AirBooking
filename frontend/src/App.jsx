@@ -43,10 +43,10 @@ function AuthLayout() {
   return (
     <div className="auth-shell">
       <section className="auth-hero">
-        <Link to="/" className="auth-brand">
+        <div className="auth-brand">
           <span className="brand-dot" />
           Air Booking
-        </Link>
+        </div>
 
         <div className="auth-hero-body">
           <p className="auth-kicker">Flight booking platform</p>
