@@ -1,0 +1,51 @@
+import { Link, NavLink, useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
+
+export default function Navbar() {
+  const { user, isLoggedIn, isAdmin, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
+
+  return (
+    <header className="navbar">
+      <Link to="/" className="brand">
+        ✈ Air Booking
+      </Link>
+
+      <nav className="nav-links">
+        {isLoggedIn && (
+          <>
+            <NavLink to="/">Dashboard</NavLink>
+            <NavLink to="/search">Search Flights</NavLink>
+            <NavLink to="/trips">My Trips</NavLink>
+            {isAdmin && <NavLink to="/admin">Admin</NavLink>}
+          </>
+        )}
+      </nav>
+
+      <div className="nav-auth">
+        {isLoggedIn ? (
+          <>
+            <span className="nav-user">
+              {user.first_name || user.username}
+              <span className="badge badge-green">approved</span>
+            </span>
+            <button className="btn btn-outline" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn btn-outline">Login</Link>
+            <Link to="/register" className="btn btn-primary">Register</Link>
+          </>
+        )}
+      </div>
+    </header>
+  );
+}
