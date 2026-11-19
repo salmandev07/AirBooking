@@ -1,10 +1,9 @@
 """
 Live flight status helper.
 
-It tries the AirLabs API first because it is simple and free-tier friendly.
-If there is no API key, the request times out, or AirLabs returns nothing,
-we fall back to a status that is worked out from the flight's own schedule.
-That way the page always shows something useful.
+Calls the real AirLabs API first. If the key is missing, the API returns an
+error, or the network fails, we fall back to a status calculated from the
+flight's own schedule so the page always shows something useful.
 """
 import logging
 
@@ -16,7 +15,7 @@ from .models import Flight
 
 logger = logging.getLogger(__name__)
 
-AIRLABS_URL = "https://api.airlabs.co/v9/flight"
+AIRLABS_URL = "https://airlabs.co/api/v9/flight"
 
 
 def get_live_status(flight):
@@ -36,7 +35,7 @@ def _fetch_from_airlabs(flight):
     try:
         response = requests.get(
             AIRLABS_URL,
-            params={"api_key": api_key, "call": flight.flight_number},
+            params={"api_key": api_key, "flight_iata": flight.flight_number},
             timeout=settings.LIVE_STATUS_TIMEOUT,
         )
         response.raise_for_status()
@@ -45,21 +44,24 @@ def _fetch_from_airlabs(flight):
         logger.warning("AirLabs request failed: %s", exc)
         return None
 
-    flights = payload.get("response", {}).get("flights") or []
-    if not flights:
+    if payload.get("error"):
+        logger.warning("AirLabs API error: %s", payload["error"])
         return None
 
-    first = flights[0]
+    first = payload.get("response") or {}
+    if not first:
+        return None
+
     return {
         "source": "AirLabs",
         "flight_number": first.get("flight_iata") or flight.flight_number,
         "status": _normalise_airlabs_status(first.get("status")),
         "lat": first.get("lat"),
-        "lon": first.get("lon"),
+        "lon": first.get("lng"),
         "altitude": first.get("alt"),
         "speed": first.get("speed"),
-        "origin": first.get("origin_iata") or flight.origin_code,
-        "destination": first.get("dest_iata") or flight.destination_code,
+        "origin": first.get("dep_iata") or flight.origin_code,
+        "destination": first.get("arr_iata") or flight.destination_code,
         "updated_at": first.get("updated"),
     }
 
