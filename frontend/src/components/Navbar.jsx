@@ -13,16 +13,19 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <Link to="/" className="brand">Air Booking</Link>
+      <Link to={isAdmin ? "/admin" : "/"} className="brand">Air Booking</Link>
 
       <nav className="nav-links">
-        {isLoggedIn && (
-          <>
-            <NavLink to="/">Dashboard</NavLink>
-            <NavLink to="/search">Search Flights</NavLink>
-            <NavLink to="/trips">My Trips</NavLink>
-            {isAdmin && <NavLink to="/admin">Admin</NavLink>}
-          </>
+        {isAdmin ? (
+          <NavLink to="/admin">Admin</NavLink>
+        ) : (
+          isLoggedIn && (
+            <>
+              <NavLink to="/">Dashboard</NavLink>
+              <NavLink to="/search">Search Flights</NavLink>
+              <NavLink to="/trips">My Trips</NavLink>
+            </>
+          )
         )}
       </nav>
 
