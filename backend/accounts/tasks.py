@@ -22,12 +22,22 @@ def send_approval_email(user_id, approved=True):
         logger.warning("Approval mail skipped, user %s no longer exists", user_id)
         return "user missing"
 
+    details = (
+        f"Username: {user.username}\n"
+        f"Email: {user.email}\n"
+        f"Full name: {(user.first_name + ' ' + user.last_name).strip() or '-'}\n"
+        f"Account status: {user.approval_status}\n"
+        f"Registered: {user.date_joined.strftime('%Y-%m-%d %H:%M UTC')}"
+    )
+
     if approved:
         subject = "Your Air Booking account is active"
         message = (
             f"Hi {user.first_name or user.username},\n\n"
             "Good news! An administrator approved your registration.\n"
             "You can now log in and start booking flights.\n\n"
+            "Account details:\n"
+            f"{details}\n\n"
             "- Air Booking team"
         )
     else:
@@ -36,6 +46,8 @@ def send_approval_email(user_id, approved=True):
             f"Hi {user.first_name or user.username},\n\n"
             "Unfortunately an administrator rejected your registration.\n"
             "If you think this is a mistake please contact support.\n\n"
+            "Account details:\n"
+            f"{details}\n\n"
             "- Air Booking team"
         )
 
