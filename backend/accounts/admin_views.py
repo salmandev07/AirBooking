@@ -32,13 +32,17 @@ class PendingUsersView(generics.ListAPIView):
 
 
 class AllUsersView(generics.ListAPIView):
-    """GET /api/admin/users/?status=approved"""
+    """GET /api/admin/users/?status=approved
+
+    Admin (staff) accounts are excluded from this list - only regular
+    users show up here.
+    """
 
     serializer_class = UserSerializer
     permission_classes = [IsAdmin]
 
     def get_queryset(self):
-        queryset = User.objects.all().order_by("-created_at")
+        queryset = User.objects.exclude(is_staff=True).order_by("-created_at")
         status_param = self.request.query_params.get("status")
         if status_param:
             queryset = queryset.filter(approval_status=status_param)
