@@ -68,7 +68,7 @@ export default function Register() {
   }
 
   return (
-    <div className="card auth-card">
+    <div className="auth-card">
       <h1>Create an account</h1>
       <p className="muted">New accounts need admin approval before you can log in.</p>
 
@@ -123,7 +123,7 @@ export default function Register() {
                   transform: "translateY(-50%)",
                   background: "none",
                   border: "none",
-                  color: "#2563eb",
+                  color: "var(--accent)",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 500,
@@ -155,7 +155,7 @@ export default function Register() {
                   transform: "translateY(-50%)",
                   background: "none",
                   border: "none",
-                  color: "#2563eb",
+                  color: "var(--accent)",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 500,

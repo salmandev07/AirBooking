@@ -36,7 +36,7 @@ export default function Login() {
   }
 
   return (
-    <div className="card auth-card">
+    <div className="auth-card">
       <h1>Welcome back</h1>
       <p className="muted">Log in with your approved user account.</p>
 
@@ -74,7 +74,7 @@ export default function Login() {
                 transform: "translateY(-50%)",
                 background: "none",
                 border: "none",
-                color: "#2563eb",
+                color: "var(--accent)",
                 cursor: "pointer",
                 fontSize: 13,
                 fontWeight: 500,

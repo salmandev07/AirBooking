@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import { useAuth } from "./context/AuthContext";
@@ -26,30 +26,78 @@ function AdminOnly({ children }) {
   return isAdmin ? children : <Navigate to="/" replace />;
 }
 
-export default function App() {
+function AppLayout() {
   return (
     <div className="app">
       <Navbar />
-
       <main className="container">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          <Route path="/" element={<Private><Dashboard /></Private>} />
-          <Route path="/search" element={<Private><FlightList /></Private>} />
-          <Route path="/book/:flightId" element={<Private><BookFlight /></Private>} />
-          <Route path="/trips" element={<Private><MyTrips /></Private>} />
-          <Route path="/admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
-
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Outlet />
       </main>
-
       <footer className="footer">Air Booking - Django and React project</footer>
     </div>
+  );
+}
+
+// Public pages use a split screen: brand panel on the left, form on the right.
+function AuthLayout() {
+  return (
+    <div className="auth-shell">
+      <section className="auth-hero">
+        <Link to="/" className="auth-brand">
+          <span className="brand-dot" />
+          Air Booking
+        </Link>
+
+        <div className="auth-hero-body">
+          <p className="auth-kicker">Flight booking platform</p>
+          <h1>Search flights. Book seats. Track trips.</h1>
+
+          <div className="auth-route">
+            <span className="route-code">DEL</span>
+            <span className="route-dash" />
+            <span className="route-code">BOM</span>
+          </div>
+
+          <ul className="auth-points">
+            <li>Live flight status updates</li>
+            <li>Seat-safe booking and cancellation</li>
+            <li>Email notifications for every step</li>
+          </ul>
+        </div>
+
+        <p className="auth-foot">Django REST Framework + React</p>
+      </section>
+
+      <section className="auth-panel">
+        <div className="auth-mobile-brand">
+          <span className="brand-dot" />
+          Air Booking
+        </div>
+        <Outlet />
+      </section>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+      </Route>
+
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Private><Dashboard /></Private>} />
+        <Route path="/search" element={<Private><FlightList /></Private>} />
+        <Route path="/book/:flightId" element={<Private><BookFlight /></Private>} />
+        <Route path="/trips" element={<Private><MyTrips /></Private>} />
+        <Route path="/admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }

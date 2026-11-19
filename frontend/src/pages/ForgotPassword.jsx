@@ -75,7 +75,7 @@ export default function ForgotPassword() {
 
   if (done) {
     return (
-      <div className="card auth-card">
+      <div className="auth-card">
         <h1>Password changed</h1>
         <div className="alert alert-success">{notice}</div>
         <button className="btn btn-primary btn-block" onClick={() => navigate("/login")}>
@@ -86,7 +86,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="card auth-card">
+    <div className="auth-card">
       <h1>Forgot password</h1>
       <p className="muted">
         {step === 1
@@ -146,7 +146,7 @@ export default function ForgotPassword() {
                   transform: "translateY(-50%)",
                   background: "none",
                   border: "none",
-                  color: "#2563eb",
+                  color: "var(--accent)",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 500,
@@ -178,7 +178,7 @@ export default function ForgotPassword() {
                   transform: "translateY(-50%)",
                   background: "none",
                   border: "none",
-                  color: "#2563eb",
+                  color: "var(--accent)",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 500,

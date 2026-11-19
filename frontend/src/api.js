@@ -4,6 +4,7 @@ import axios from "axios";
 // JWT access token and refreshes it once if the token has expired.
 const api = axios.create({
   baseURL: "/api",
+  timeout: 20000,
 });
 
 api.interceptors.request.use((config) => {
@@ -61,8 +62,14 @@ export function errorMessage(error) {
     if (typeof first === "string") return first;
   }
 
+  if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
+    return "That took too long. Please try again.";
+  }
   if (error.message === "Network Error") {
     return "Cannot reach the server. Is the backend running?";
+  }
+  if (error.response?.status >= 500) {
+    return "Something went wrong on our end. Please try again.";
   }
   return error.message || "Something went wrong.";
 }

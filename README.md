@@ -13,6 +13,14 @@ A full-stack flight booking platform built with Django REST Framework on the bac
 - **Live Flight Status:** Fetches real-time flight status from the AirLabs API, falling back automatically to schedule-based simulated status when no API key is configured.
 - **Asynchronous Email Notifications:** Queues approval and rejection emails via Celery and Redis so admin actions return immediately.
 
+## Interface
+
+- Premium dark glassmorphism theme built around black with orange accents.
+- Split auth screens: a brand panel on the left and a glass form card on the right.
+- Responsive layouts: mobile stacks cards and forms, tables scroll horizontally, and the nav wraps.
+- Clear inline success and error alerts on every form, plus a top-level error boundary.
+- The login page accepts a username or an email address.
+
 ## Tech Stack
 
 | Layer | Technologies |

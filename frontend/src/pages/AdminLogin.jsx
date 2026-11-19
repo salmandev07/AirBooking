@@ -35,7 +35,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="card auth-card">
+    <div className="auth-card">
       <h1>Admin login</h1>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -72,7 +72,7 @@ export default function AdminLogin() {
                 transform: "translateY(-50%)",
                 background: "none",
                 border: "none",
-                color: "#2563eb",
+                color: "var(--accent)",
                 cursor: "pointer",
                 fontSize: 13,
                 fontWeight: 500,

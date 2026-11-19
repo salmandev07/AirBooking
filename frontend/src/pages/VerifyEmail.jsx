@@ -63,7 +63,7 @@ export default function VerifyEmail() {
 
   if (done) {
     return (
-      <div className="card auth-card">
+      <div className="auth-card">
         <h1>Email confirmed</h1>
         <div className="alert alert-success">{notice}</div>
         <button className="btn btn-primary btn-block" onClick={() => navigate("/login")}>
@@ -74,7 +74,7 @@ export default function VerifyEmail() {
   }
 
   return (
-    <div className="card auth-card">
+    <div className="auth-card">
       <h1>Confirm your email</h1>
       <p className="muted">Enter the 6-digit code we sent to your email address.</p>
 

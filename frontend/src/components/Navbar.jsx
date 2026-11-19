@@ -13,7 +13,10 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <Link to={isAdmin ? "/admin" : "/"} className="brand">Air Booking</Link>
+      <Link to={isAdmin ? "/admin" : "/"} className="brand">
+        <span className="brand-dot" />
+        Air Booking
+      </Link>
 
       <nav className="nav-links">
         {isAdmin ? (
