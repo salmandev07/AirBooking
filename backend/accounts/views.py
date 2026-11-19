@@ -122,7 +122,7 @@ class ForgotPasswordView(APIView):
             code = get_random_string(length=6, allowed_chars="0123456789")
             PasswordResetOTP.objects.create(user=user, code=code)
             send_otp_email.delay(user.email, code)
-        return Response({"detail": "If that email exists, a reset code has been sent."})
+        return Response({"detail": f"OTP sent to {email}"})
 
 
 class ResetPasswordView(APIView):
