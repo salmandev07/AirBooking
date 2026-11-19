@@ -37,7 +37,8 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" className="btn btn-outline">Login</Link>
+            <Link to="/admin/login" className="btn btn-ghost">Admin login</Link>
+            <Link to="/login" className="btn btn-ghost">Login</Link>
             <Link to="/register" className="btn btn-primary">Register</Link>
           </>
         )}

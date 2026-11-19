@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { useAuth } from "./context/AuthContext";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 import BookFlight from "./pages/BookFlight";
 import Dashboard from "./pages/Dashboard";
 import FlightList from "./pages/FlightList";
@@ -17,8 +18,9 @@ function Private({ children }) {
 }
 
 function AdminOnly({ children }) {
-  const { isAdmin, loading } = useAuth();
+  const { isLoggedIn, isAdmin, loading } = useAuth();
   if (loading) return <div className="page-loading">Loading...</div>;
+  if (!isLoggedIn) return <Navigate to="/admin/login" replace />;
   return isAdmin ? children : <Navigate to="/" replace />;
 }
 
@@ -30,6 +32,7 @@ export default function App() {
       <main className="container">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/register" element={<Register />} />
 
           <Route path="/" element={<Private><Dashboard /></Private>} />

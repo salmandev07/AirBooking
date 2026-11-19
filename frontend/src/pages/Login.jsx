@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <div className="card auth-card">
       <h1>Welcome back</h1>
-      <p className="muted">Log in with your approved account.</p>
+      <p className="muted">Log in with your approved user account.</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 
