@@ -67,10 +67,6 @@ export default function AdminLogin() {
       </form>
 
       <p className="muted center">
-        <Link to="/forgot-password">Forgot password?</Link>
-      </p>
-
-      <p className="muted center">
         Staff? You can <Link to="/login">log in as a user</Link>.
       </p>
     </div>
