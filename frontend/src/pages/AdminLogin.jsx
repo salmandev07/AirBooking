@@ -10,6 +10,7 @@ export default function AdminLogin() {
 
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -53,12 +54,19 @@ export default function AdminLogin() {
         <label>
           Password
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="password"
             autoComplete="current-password"
           />
+          <button
+            type="button"
+            className="btn btn-link text-muted fs-7 small"
+            onClick={() => setShowPassword((s) => !s)}
+          >
+            {showPassword ? "Hide" : "Show"} password
+          </button>
         </label>
 
         <button className="btn btn-primary btn-block" disabled={busy}>

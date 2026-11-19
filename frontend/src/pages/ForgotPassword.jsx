@@ -11,6 +11,8 @@ export default function ForgotPassword() {
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
@@ -126,22 +128,36 @@ export default function ForgotPassword() {
           <label>
             New password
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="min 6 characters"
               autoComplete="new-password"
             />
+            <button
+              type="button"
+              className="btn btn-link text-muted fs-7 small"
+              onClick={() => setShowPassword((s) => !s)}
+            >
+              {showPassword ? "Hide" : "Show"} password
+            </button>
           </label>
           <label>
             Confirm password
             <input
-              type="password"
+              type={showPassword2 ? "text" : "password"}
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
               placeholder="repeat password"
               autoComplete="new-password"
             />
+            <button
+              type="button"
+              className="btn btn-link text-muted fs-7 small"
+              onClick={() => setShowPassword2((s) => !s)}
+            >
+              {showPassword2 ? "Hide" : "Show"} password
+            </button>
           </label>
           <button className="btn btn-primary btn-block" disabled={busy}>
             {busy ? "Resetting..." : "Reset password"}
